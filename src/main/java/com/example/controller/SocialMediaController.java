@@ -6,6 +6,7 @@ import com.example.entity.Message;
 import com.example.entity.Account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import java.util.List;
@@ -31,9 +32,13 @@ import java.util.Optional;
 
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
     private MessageService messageService;
+    @Autowired
     private AccountRepository accountRepository;
+    @Autowired
     private AccountService accountService;
+    
 
     // get all messages handler
     @GetMapping("/messages")
@@ -64,24 +69,26 @@ import java.util.Optional;
     }
     // update message by id
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<Object> updateMessageById(@PathVariable Integer messageId, @RequestBody String messageText){
-        Message targetmessage = messageRepository.findByMessageId(messageId);
-        Message message = new Message();
-        if(messageRepository.existsById(messageId)){
+    public ResponseEntity<Object> updateMessageById(@PathVariable Integer message_id, @RequestBody String messageText){
+        
+       Optional< Message> targetmessage = messageRepository.findById(message_id);
+       if(targetmessage.isPresent()){
+        Message message = targetmessage.get();
+       
             if(messageService.validMessage(messageText)){
-                 message.setMessageId(targetmessage.getMessageId());
                 message.setMessageText(messageText);
-                message.setPostedBy(targetmessage.getPostedBy());
-                message.setTimePostedEpoch(targetmessage.getTimePostedEpoch());
                 messageRepository.save(message);
+
                 return ResponseEntity.ok(1);
             }else{
                 return ResponseEntity.status(400).build();
             }
         }else{
-            return ResponseEntity.status(400).build();
+                return ResponseEntity.status(400).build();
+            }
         }
-    }
+        
+    
 
     // retrieve all messages by account id handler
     @GetMapping("/accounts/{accountId}/messages")
@@ -96,7 +103,7 @@ import java.util.Optional;
     @PostMapping("/messages")
     public ResponseEntity <Object> messageCreationValidation(@RequestBody Message message){
 
-        Optional<Message> candidate = messageRepository.findBypostedBy(message.getPostedBy());
+        Optional<Message> candidate = messageRepository.findById(message.getPostedBy());
 
         if(candidate.isPresent()){
             if(messageService.validMessage(message.getMessageText())){

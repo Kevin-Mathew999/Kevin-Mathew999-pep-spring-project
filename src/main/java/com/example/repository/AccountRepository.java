@@ -17,7 +17,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer>  {
     boolean existsByUsernameAndPassword(String username, String password);
 
     //returns account id along with the username and password of a requested account
-    @Query("Select a.id,a.username,a.password From Account a WHERE a.username = :username AND a.password =:password")
     Account findAccountByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     // custom method to check for the existence of username
