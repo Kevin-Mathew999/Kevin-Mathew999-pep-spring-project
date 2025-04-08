@@ -82,7 +82,7 @@ import java.util.Optional;
         List <Message> messages = messageRepository.findAllBypostedBy(accountId);
 
         if(messages.isEmpty()){
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(200).build();
 
         }
         return ResponseEntity.ok(messages);
