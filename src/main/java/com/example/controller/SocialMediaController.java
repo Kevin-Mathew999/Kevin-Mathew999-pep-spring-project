@@ -81,10 +81,7 @@ import java.util.Optional;
     public ResponseEntity <List<Message>> retrieveAllMessagesByAccountID(@PathVariable Integer accountId){
         List <Message> messages = messageRepository.findAllBypostedBy(accountId);
 
-        if(messages.isEmpty()){
-            return ResponseEntity.status(200).build();
-
-        }
+        
         return ResponseEntity.ok(messages);
     }
 
