@@ -7,5 +7,7 @@ import com.example.entity.Message;
 public interface MessageRepository extends JpaRepository<Message, Integer>{
       // JPA method naming convention. Retrieve all messages by account Id
     List <Message> findAllBypostedBy(int id);
+
+    Message findByMessageId(int message_id);
     
 }

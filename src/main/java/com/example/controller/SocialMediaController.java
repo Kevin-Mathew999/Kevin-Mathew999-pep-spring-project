@@ -41,9 +41,10 @@ import java.util.Optional;
 }
     //get message by id handler
     @GetMapping("/messages/{message_id}")
-    @ResponseBody
-    public Optional<Message> getMessageById(@PathVariable Integer message_id){
-        return messageRepository.findById(message_id);
+    public ResponseEntity <Message> getMessageById(@PathVariable Integer message_id){
+         Message message =  messageRepository.findByMessageId(message_id);
+
+        return ResponseEntity.ok(message);
     }
     
     // delete message by id handler
