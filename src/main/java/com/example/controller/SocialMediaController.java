@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import java.util.List;
+
+import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
@@ -31,6 +33,7 @@ import java.util.Optional;
     private MessageRepository messageRepository;
     private MessageService messageService;
     private AccountRepository accountRepository;
+    private AccountService accountService;
 
     // get all messages handler
     @GetMapping("/messages")
@@ -61,12 +64,15 @@ import java.util.Optional;
     }
     // update message by id
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<Object> updateMessageById(@PathVariable Integer message_id, @RequestBody String messageText){
-        Optional<Message> targetmessage = messageRepository.findById(message_id);
-        if(messageRepository.existsById(message_id)){
+    public ResponseEntity<Object> updateMessageById(@PathVariable Integer messageId, @RequestBody String messageText){
+        Message targetmessage = messageRepository.findByMessageId(messageId);
+        Message message = new Message();
+        if(messageRepository.existsById(messageId)){
             if(messageService.validMessage(messageText)){
-                Message message = targetmessage.get();
+                 message.setMessageId(targetmessage.getMessageId());
                 message.setMessageText(messageText);
+                message.setPostedBy(targetmessage.getPostedBy());
+                message.setTimePostedEpoch(targetmessage.getTimePostedEpoch());
                 messageRepository.save(message);
                 return ResponseEntity.ok(1);
             }else{
@@ -88,7 +94,8 @@ import java.util.Optional;
 
     //processing the creation of new messages handler
     @PostMapping("/messages")
-    public ResponseEntity <Message> messageCreationValidation(@RequestBody Message message){
+    public ResponseEntity <Object> messageCreationValidation(@RequestBody Message message){
+
         Optional<Account> candidate = accountRepository.findById(message.getPostedBy());
 
         if(candidate.isPresent()){
@@ -103,6 +110,7 @@ import java.util.Optional;
             return ResponseEntity.status(400).build();
 
         }
+    
     }
 
     // user login handler
@@ -119,7 +127,7 @@ import java.util.Optional;
     // new user registration handler
     @PostMapping("/register")
     public ResponseEntity <Account> accountRegistration(@RequestBody Account account){
-        if(messageService.validCredentials(account)){
+        if(accountService.validCredentials(account)){
             if(!accountRepository.existsByUsername(account.getUsername())){
                 Account savedaccount = accountRepository.save(account);
                 return ResponseEntity.ok(savedaccount);

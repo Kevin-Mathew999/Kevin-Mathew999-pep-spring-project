@@ -14,8 +14,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer>  {
   
 
     // custom login validation to ensure username and password exist
-    @Query("Select CASE WHEN Count(a) > 0 THEN true ELSE false END FROM Account a WHERE a.username = :username AND a.password = :password")
-    boolean existsByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    boolean existsByUsernameAndPassword(String username, String password);
 
     //returns account id along with the username and password of a requested account
     @Query("Select a.id,a.username,a.password From Account a WHERE a.username = :username AND a.password =:password")

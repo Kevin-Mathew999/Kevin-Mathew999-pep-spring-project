@@ -46,21 +46,11 @@ public class MessageService {
         if(!messagetext.isEmpty() && messagetext.length() <= 255 ){
             return true;
         }else{
-            System.out.println("Not a valid message");
             return false;
         }
     }
 
-       //shortcut to check if account credentials meet criteria
-       public Boolean validCredentials(Account account){
-        
-        if(!account.getUsername().isEmpty() && account.getPassword().length() >= 4 ){
-            return true;
-        }else{
-            System.out.println("Review login credentials criteria");
-            return false;
-        }
-    }
+     
 
 
 }
