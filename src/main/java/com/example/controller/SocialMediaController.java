@@ -96,7 +96,7 @@ import java.util.Optional;
     @PostMapping("/messages")
     public ResponseEntity <Object> messageCreationValidation(@RequestBody Message message){
 
-        Optional<Account> candidate = accountRepository.findById(message.getPostedBy());
+        Optional<Message> candidate = messageRepository.findBypostedBy(message.getPostedBy());
 
         if(candidate.isPresent()){
             if(messageService.validMessage(message.getMessageText())){
