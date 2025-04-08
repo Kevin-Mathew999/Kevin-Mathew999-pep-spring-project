@@ -15,12 +15,12 @@ public interface AccountRepository extends JpaRepository<Account, Integer>  {
     List <Message> retrieveAllMessagesBypostedBy(int id);
 
     // custom login validation to ensure username and password exist
-    @Query("Select COUNT(a) > 0 FROM account a WHERE a.username = :username AND a.password = :password")
+    @Query("Select CASE WHEN EXISTS(Select 1 FROM account a WHERE a.username = :username AND a.password = :password) THEN true ELSE false END")
     boolean existsByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     //returns account id along with the username and password of a requested account
     @Query("Select a.id,a.username,a.password From account a WHERE a.username = :username AND a.password =:password")
-    Account returnAccountByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    Account findAccountByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     // custom method to check for the existence of username
     boolean existsByUsername(String username);

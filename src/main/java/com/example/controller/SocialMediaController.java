@@ -111,7 +111,7 @@ import java.util.Optional;
     @PostMapping("/login")
     public ResponseEntity <Account> loginValidation(@RequestBody Account account){
         if(accountRepository.existsByUsernameAndPassword(account.getUsername(),account.getPassword())){
-            return ResponseEntity.ok(accountRepository.returnAccountByUsernameAndPassword(account.getUsername(), account.getPassword()));
+            return ResponseEntity.ok(accountRepository.findAccountByUsernameAndPassword(account.getUsername(), account.getPassword()));
 
         }else{
             return ResponseEntity.status(401).build();
