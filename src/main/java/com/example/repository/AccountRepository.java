@@ -11,8 +11,7 @@ import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Integer>  {
       
-    // JPA method naming convention. Retrieve all methods by account Id
-    List <Message> retrieveAllMessagesBypostedBy(int id);
+  
 
     // custom login validation to ensure username and password exist
     @Query("Select CASE WHEN EXISTS(Select 1 FROM account a WHERE a.username = :username AND a.password = :password) THEN true ELSE false END")
