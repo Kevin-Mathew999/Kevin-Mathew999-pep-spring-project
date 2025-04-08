@@ -78,7 +78,7 @@ import java.util.Optional;
 
     // retrieve all messages by account id handler
     @GetMapping("/accounts/{accountId}/messages")
-    public ResponseEntity <Object> retrieveAllMessagesByAccountID(@PathVariable Integer accountId){
+    public ResponseEntity <List<Message>> retrieveAllMessagesByAccountID(@PathVariable Integer accountId){
         List <Message> messages = messageRepository.findAllBypostedBy(accountId);
 
         if(messages.isEmpty()){
