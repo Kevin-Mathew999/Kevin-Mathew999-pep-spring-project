@@ -43,10 +43,10 @@ public class MessageService {
     //shortcut to check if a message body meets criteria
     public Boolean validMessage(String messagetext){
         
-        if(!messagetext.isBlank() && messagetext.length() <= 255 ){
-            return true;
-        }else{
+        if(!messagetext.isEmpty() && messagetext.length() < 255 ){
             return false;
+        }else{
+            return true;
         }
     }
 
