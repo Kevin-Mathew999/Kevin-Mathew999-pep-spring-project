@@ -16,6 +16,7 @@ import com.example.service.MessageService;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 import java.util.Optional;
+import java.util.Map;
 
 
 
@@ -69,16 +70,16 @@ import java.util.Optional;
     }
     // update message by id
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<Object> updateMessageById(@PathVariable Integer message_id, @RequestBody String messageText){
-        
+    public ResponseEntity<Object> updateMessageById(@PathVariable Integer message_id, @RequestBody Map <String,String> body){
        Optional< Message> targetmessage = messageRepository.findById(message_id);
+
        if(targetmessage.isPresent()){
-        Message message = targetmessage.get();
+        String messageText = body.get("messageText");
        
             if(messageService.validMessage(messageText)){
+                Message message = targetmessage.get();
                 message.setMessageText(messageText);
                 messageRepository.save(message);
-
                 return ResponseEntity.ok(1);
             }else{
                 return ResponseEntity.status(400).build();
